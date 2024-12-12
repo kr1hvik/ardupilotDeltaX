@@ -34,6 +34,12 @@ Mode *Copter::mode_from_mode_num(const Mode::Number mode)
 {
 
     switch (mode) {
+
+#if MODE_BASKETBALL_ENABLED
+        case Mode::Number::BASKETBALL:
+            return &mode_basketball;
+#endif
+
 #if MODE_ACRO_ENABLED
         case Mode::Number::ACRO:
             return &mode_acro;
