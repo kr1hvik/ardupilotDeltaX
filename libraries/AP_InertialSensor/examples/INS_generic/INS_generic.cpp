@@ -9,6 +9,12 @@
 #include <AP_Logger/AP_Logger.h>
 #include <GCS_MAVLink/GCS_Dummy.h>
 
+#include <AP_BattMonitor/AP_BattMonitor.h>
+#include <AP_Motors/AP_Motors.h>
+#include <SRV_Channel/SRV_Channel.h>
+#include <AP_ESC_Telem/AP_ESC_Telem.h>
+#include <stdio.h>
+
 const AP_HAL::HAL &hal = AP_HAL::get_HAL();
 
 static AP_InertialSensor ins;
@@ -18,6 +24,7 @@ static AP_InertialSensor ins;
 
 static void display_offsets_and_scaling();
 static void run_test();
+static void test_motors();
 
 // board specific config
 static AP_BoardConfig BoardConfig;
@@ -46,6 +53,13 @@ void setup(void)
     hal.console->printf("Number of detected gyros  : %u\n\n", ins.get_gyro_count());
 
     hal.console->printf("Complete. Reading:\n");
+
+    // my own code 
+    /*
+    AP_Motors::motor_frame_class frame_class = AP_Motors::MOTOR_FRAME_QUAD;
+    AP_Motors::motor_frame_type frame_type = AP_Motors::MOTOR_FRAME_TYPE_H;
+*/
+
 }
 
 void loop(void)
@@ -58,7 +72,8 @@ void loop(void)
     "    d) display offsets and scaling\n"
     "    l) level (capture offsets from level)\n"
     "    t) test\n"
-    "    r) reboot");
+    "    r) reboot\n"
+    "    m) test motors");
 
     // wait for user input
     while (!hal.console->available()) {
@@ -81,8 +96,15 @@ void loop(void)
         if (user_input == 'r') {
             hal.scheduler->reboot();
         }
+        if (user_input == 'm' || user_input == 'M') {
+            test_motors();
+        }
     }
 }
+static void test_motors(){
+    hal.console->printf("starting motor test");
+}
+
 
 static void display_offsets_and_scaling()
 {
